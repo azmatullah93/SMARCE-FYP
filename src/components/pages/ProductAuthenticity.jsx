@@ -1,14 +1,38 @@
-// import React from 'react'
+// import React, { useState } from 'react';
+//import QrReader from 'react-qr-reader';
+import { useState } from 'react';
 
-import { useState } from 'react'
 const ProductAuthenticity = () => {
   const [formData, setFormData] = useState({
-    productid: ''
-  })
+    productID: ''
+  });
 
-  const handleChange = (e)=> {
-    
-  }
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanResult, setScanResult] = useState('');
+
+  const handleScan = data => {
+    if (data) {
+      setScanResult(data);
+      setIsScanning(false);
+    }
+  };
+
+  const handleError = err => {
+    console.error(err);
+  };
+
+  const handleSubmit = () => {
+    setIsScanning(true);
+  };
+
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: value
+    }));
+  };
+
   return (
     <div className=''>
       <div className='flex flex-col items-center bg-gray-100 min-h-screen justify-center'>
@@ -24,6 +48,8 @@ const ProductAuthenticity = () => {
               Product ID
             </label>
             <input
+              onChange={handleChange}
+              value={formData.productID}
               type='text'
               name='productID'
               id='productID'
@@ -34,9 +60,29 @@ const ProductAuthenticity = () => {
             />
           </div>
         </div>
+        <button
+          className='bg-pink-400 p-4 rounded-lg mb-4 mt-4 text-white'
+          type='button'
+          onClick={handleSubmit}
+        >
+          Scan QRCode
+        </button>
+        {isScanning && (
+          <QrReader
+            delay={300}
+            onError={handleError}
+            onScan={handleScan}
+            style={{ width: '100%' }}
+          />
+        )}
+        {scanResult && (
+          <div className='mt-4 p-4 bg-green-200 rounded'>
+            <p>Scanned Result: {scanResult}</p>
+          </div>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductAuthenticity
+export default ProductAuthenticity;

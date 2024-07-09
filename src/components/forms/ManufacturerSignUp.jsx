@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Button from '../common/Button'
+import smartContractService from './../../contracts/smartContract'
+
 const ManufacturerSignUp = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -9,6 +11,23 @@ const ManufacturerSignUp = () => {
     password: '',
     confirmPassword: ''
   })
+
+  const [connected, setConnected] = useState(false)
+
+  const handleSignUp = async () => {
+    try {
+      // Connect to Metamask
+      await smartContractService.connectWallet()
+      setConnected(true)
+
+      // Call your smart contract function
+      const result = await smartContractService.signingUP()
+      console.log('Sign up result:', result)
+      return result
+    } catch (error) {
+      console.error('Error during sign up:', error)
+    }
+  }
 
   const handleChange = e => {
     const { name, value } = e.target
@@ -128,8 +147,9 @@ const ManufacturerSignUp = () => {
             </div>
 
             <div className='btn'>
-              <Link to='/ManufacturerDashboard'>
-              <Button
+              <Link to=''>
+                <Button
+                  onClick={handleSignUp}
                   text='SignUp'
                   style='text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200  w-full py-4 rounded-lg'
                 />

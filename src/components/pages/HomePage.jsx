@@ -6,6 +6,8 @@ import './../../assets/styles/homePage.css'
 import homeImg from './../../assets/images/smarce1.png'
 import Footer from './Footer'
 import { Link } from 'react-router-dom'
+
+
 const HomePage = () => {
   return (
     <div className='home pb-5'>
@@ -16,9 +18,11 @@ const HomePage = () => {
           <p className='text-xl mb-5 font-spaceGrotesk'>
             FIND AND TRACE FAKE PRODUCTS IN SUPPLY CHAIN
           </p>
+
           <Link to='ProductAuthenticity'>
             <Button text='Check Authenticity' />
           </Link>
+          
         </div>
         <div className='bg-#F087FF4D'>
           <img className='w-700' src={homeImg} alt='hero-img' />

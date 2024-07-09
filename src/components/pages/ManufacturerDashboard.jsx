@@ -1,16 +1,23 @@
 // import React from 'react'
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import QrCode from '../common/QrCode'
 
 const ManufacturerDashboard = () => {
   const [showForm, setShowForm] = useState(false)
   const [products, setProducts] = useState([])
+  const [qrValue, setqrValue] = useState('')
   const [product, setProduct] = useState({
+    ID: '',
     name: '',
-    source: '',
-    destination: '',
+    quantity: '',
+    url: '',
     image: null
   })
+
+  const handleGenerateQr = () => {
+    setqrValue(product.ID)
+  }
 
   const toggleForm = () => {
     setShowForm(!showForm)
@@ -37,23 +44,21 @@ const ManufacturerDashboard = () => {
     }
   }
 
-
   const handleAdd = e => {
     e.preventDefault()
     if (
-      product.name &&
-      product.source &&
-      product.destination &&
-      product.image
+      (product.ID,
+      product.name && product.quantity && product.url && product.image)
     ) {
       addProduct({
         id: uuidv4(),
         ...product
       })
       setProduct({
+        ID: '',
         name: '',
-        source: '',
-        destination: '',
+        quantity: '',
+        url: '',
         image: null
       })
     }
@@ -77,6 +82,25 @@ const ManufacturerDashboard = () => {
               <form onSubmit={handleAdd}>
                 <div className='mb-5'>
                   <label
+                    htmlFor='ID'
+                    className='block text-sm font-medium mx-4 text-gray-700'
+                  >
+                    Product ID
+                  </label>
+                  <input
+                    className='block w-full py-4 px-4 mt-1 border border-gray-300 rounded-lg shadow-sm placeholer-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                    type='id'
+                    id='ID'
+                    name='ID'
+                    required
+                    placeholder='Enter Your Product ID'
+                    value={product.ID}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className='mb-5'>
+                  <label
                     htmlFor='name'
                     className='block text-sm font-medium mx-4 text-gray-700'
                   >
@@ -93,40 +117,41 @@ const ManufacturerDashboard = () => {
                     onChange={handleChange}
                   />
                 </div>
+
                 <div className='mb-5'>
                   <label
                     htmlFor='source'
                     className='block text-sm font-medium mx-4 text-gray-700'
                   >
-                    Source
+                    Quantity
                   </label>
                   <input
                     className='block w-full py-4 px-4 mt-1 border border-gray-300 rounded-lg shadow-sm placeholer-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
-                    type='text'
-                    id='source'
-                    name='source'
+                    type='number'
+                    id='quantity'
+                    name='quantity'
                     required
-                    placeholder='Enter The Source of the Product'
+                    placeholder='Enter The Quantity of the Product'
                     onChange={handleChange}
-                    value={product.source}
+                    value={product.quantity}
                   />
                 </div>
                 <div className='mb-5'>
                   <label
-                    htmlFor='destination'
+                    htmlFor='url'
                     className='block text-sm font-medium mx-4 text-gray-700'
                   >
-                    Destination
+                    URL
                   </label>
                   <input
                     className='block w-full py-4 px-4 mt-1 border border-gray-300 rounded-lg shadow-sm placeholer-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
                     type='text'
-                    id='destination'
-                    name='destination'
+                    id='url'
+                    name='url'
                     required
-                    placeholder='Enter The Destination of the Product'
+                    placeholder='Enter The URL of the Product'
                     onChange={handleChange}
-                    value={product.destination}
+                    value={product.url}
                   />
                 </div>
                 <div className='mb-5'>
@@ -140,6 +165,19 @@ const ManufacturerDashboard = () => {
                     onChange={handleImage}
                   />
                 </div>
+
+                <div className=''>
+                  <button
+                    className='bg-pink-400 p-4 rounded-lg mb-4 ml-500'
+                    type='button'
+                    onClick={handleGenerateQr}
+                  >
+                    Generate QRCode
+                  </button>
+                  {qrValue && <QrCode value={qrValue} />}
+                  
+                </div>
+
                 <div className='btn'>
                   <button
                     type='submit'
@@ -152,6 +190,7 @@ const ManufacturerDashboard = () => {
             </div>
           )}
         </div>
+
         <div className=' grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 p-10'>
           {products.map(product => {
             return (
@@ -165,9 +204,10 @@ const ManufacturerDashboard = () => {
                   alt={product.name}
                 />
                 <div className='p-4'>
+                  <h3 className='text-lg font-semibold'>{`ID: ${product.ID}`}</h3>
                   <h3 className='text-lg font-semibold'>{product.name}</h3>
-                  <p className='text-gray-600'>{`Source: ${product.source}`}</p>
-                  <p className='text-gray-600'>{`Destination: ${product.destination}`}</p>
+                  <p className='text-gray-600'>{`Quantity: ${product.quantity}`}</p>
+                  <p className='text-gray-600'>{`URL: ${product.url}`}</p>
                 </div>
               </div>
             )

@@ -105,3 +105,11 @@ contract SupplyChain {
         emit ProductSold(productId, msg.sender, _customer, _quantity);
     }
 }
+
+
+ setProduct({
+        name: '',
+        source: '',
+        destination: '',
+        image: null
+      })

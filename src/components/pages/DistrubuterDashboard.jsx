@@ -37,7 +37,6 @@ const DistributerDashboard = () => {
     }
   }
 
-
   const handleAdd = e => {
     e.preventDefault()
     if (

@@ -106,10 +106,3 @@ contract SupplyChain {
     }
 }
 
-
- setProduct({
-        name: '',
-        source: '',
-        destination: '',
-        image: null
-      })

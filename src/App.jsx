@@ -1,4 +1,5 @@
 import './App.css'
+import Navbar from './components/common/Navbar'
 // import Button from './components/Button'
 import HomePage from './components/pages/HomePage'
 // import SmartContractService from './contracts/smartContract'
@@ -18,6 +19,7 @@ function App () {
 
   return (
     <>
+      {/* <Navbar /> */}
       <HomePage />
     </>
   )

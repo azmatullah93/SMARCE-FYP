@@ -63,6 +63,9 @@
 import React, { useState } from 'react'
 import Button from './Button'
 import { Link } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify'
+import { useEffect } from 'react'
+import 'react-toastify/dist/ReactToastify.css'
 import SmartContractService from '../../contracts/smartContract'
 
 const Navbar = () => {
@@ -78,13 +81,20 @@ const Navbar = () => {
       const address = await signer.getAddress()
       setAccount(address)
       setIsConnected(true)
+      console.log('Connected to wallet:', address)
+
+      localStorage.setItem('walletConnected', 'true')
+      localStorage.setItem('walletAddress', address)
+
       console.log('Wallet connected successfully')
+      toast.success('wallet connected successfully')
 
       // Fetch the owner ID
       const fetchedOwnerID = await SmartContractService.getOwnerID(address)
       setOwnerID(fetchedOwnerID) // Directly set the ownerID
     } catch (error) {
       console.error('Error connecting wallet:', error)
+      toast.error('Error connecting wallet')
     }
   }
 
@@ -103,14 +113,28 @@ const Navbar = () => {
     }
   }
 
+  useEffect(() => {
+    const isWalletConnected = localStorage.getItem('walletConnected' === 'true')
+    const walletAddress = localStorage.getItem('walletAddress')
+  }, [])
+
   return (
     <div>
       <nav className='bg-pink-200 flex justify-between align-middle'>
-        <h1 className='font-bold text-lg flex align-middle pl-3 pt-3'>
-          <Link to='/'>
-            <button>SMARCE</button>
-          </Link>
-        </h1>
+        <div className='flex gap-10'>
+          <h1 className='font-bold text-lg flex align-middle pl-3 pt-3'>
+            <Link to='/'>
+              <button>SMARCE</button>
+            </Link>
+          </h1>
+
+          <h1 className='font-bold text-lg flex align-middle pl-3 pt-3'>
+            <Link to='/manufacturerDashboard'>
+              <button>Manufacturer</button>
+            </Link>
+          </h1>
+        </div>
+
         <div>
           <ul className='flex gap-5 align-middle pt-1 pr-1'>
             <li>
@@ -128,6 +152,18 @@ const Navbar = () => {
           </ul>
         </div>
       </nav>
+      <ToastContainer
+        position='top-right'
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='colored'
+      />
     </div>
   )
 }

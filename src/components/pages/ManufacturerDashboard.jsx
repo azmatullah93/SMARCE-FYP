@@ -2,7 +2,10 @@
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import QrCode from '../common/QrCode'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import SmartContractService from '../../contracts/smartContract'
+import Navbar from '../common/Navbar'
 const ManufacturerDashboard = () => {
   const [showForm, setShowForm] = useState(false)
   const [products, setProducts] = useState([])
@@ -50,15 +53,18 @@ const ManufacturerDashboard = () => {
 
     try {
       const result = await SmartContractService.manufactureProduct()
+      toast.success('Product Added successfully')
       console.log(result)
     } catch (error) {
       console.error(error.message)
+      toast.error('Error')
     }
     toggleForm()
   }
 
   return (
     <div>
+      {/* <Navbar /> */}
       <div className='bg-gray-100 min-h-screen relative'>
         <div className='bg-gray-100'>
           <div className='btn ml-md'>
@@ -205,6 +211,18 @@ const ManufacturerDashboard = () => {
           })}
         </div>
       </div>
+      <ToastContainer
+        position='top-right'
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='colored'
+      />
     </div>
   )
 }

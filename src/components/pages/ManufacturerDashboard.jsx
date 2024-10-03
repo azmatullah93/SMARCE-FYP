@@ -2,21 +2,22 @@
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import QrCode from '../common/QrCode'
-
+import SmartContractService from '../../contracts/smartContract'
 const ManufacturerDashboard = () => {
   const [showForm, setShowForm] = useState(false)
   const [products, setProducts] = useState([])
   const [qrValue, setqrValue] = useState('')
   const [product, setProduct] = useState({
-    ID: '',
-    name: '',
+    productId: '',
+    productName: '',
     quantity: '',
     url: '',
+    qrCode: '',
     image: null
   })
 
   const handleGenerateQr = () => {
-    setqrValue(product.ID)
+    setqrValue(product.productId)
   }
 
   const toggleForm = () => {
@@ -44,23 +45,14 @@ const ManufacturerDashboard = () => {
     }
   }
 
-  const handleAdd = e => {
-    e.preventDefault()
-    if (
-      (product.ID,
-      product.name && product.quantity && product.url && product.image)
-    ) {
-      addProduct({
-        id: uuidv4(),
-        ...product
-      })
-      setProduct({
-        ID: '',
-        name: '',
-        quantity: '',
-        url: '',
-        image: null
-      })
+  const handleAdd = async () => {
+    console.log('handleAdd function is called')
+
+    try {
+      const result = await SmartContractService.manufactureProduct()
+      console.log(result)
+    } catch (error) {
+      console.error(error.message)
     }
     toggleForm()
   }
@@ -82,26 +74,26 @@ const ManufacturerDashboard = () => {
               <form onSubmit={handleAdd}>
                 <div className='mb-5'>
                   <label
-                    htmlFor='ID'
+                    htmlFor='productId'
                     className='block text-sm font-medium mx-4 text-gray-700'
                   >
                     Product ID
                   </label>
                   <input
                     className='block w-full py-4 px-4 mt-1 border border-gray-300 rounded-lg shadow-sm placeholer-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
-                    type='id'
-                    id='ID'
-                    name='ID'
+                    type='productId'
+                    id='productId'
+                    name='productId'
                     required
                     placeholder='Enter Your Product ID'
-                    value={product.ID}
+                    value={product.productId}
                     onChange={handleChange}
                   />
                 </div>
 
                 <div className='mb-5'>
                   <label
-                    htmlFor='name'
+                    htmlFor='productName'
                     className='block text-sm font-medium mx-4 text-gray-700'
                   >
                     Product Name
@@ -109,11 +101,11 @@ const ManufacturerDashboard = () => {
                   <input
                     className='block w-full py-4 px-4 mt-1 border border-gray-300 rounded-lg shadow-sm placeholer-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
                     type='text'
-                    id='name'
-                    name='name'
+                    id='productName'
+                    name='productName'
                     required
                     placeholder='Enter Your Product Name'
-                    value={product.name}
+                    value={product.productName}
                     onChange={handleChange}
                   />
                 </div>
@@ -175,7 +167,6 @@ const ManufacturerDashboard = () => {
                     Generate QRCode
                   </button>
                   {qrValue && <QrCode value={qrValue} />}
-                  
                 </div>
 
                 <div className='btn'>

@@ -60,60 +60,48 @@
 
 // export default Navbar;
 
-
-
-
-
-
-
-
-
-
-
-
-
-import React, { useState } from 'react';
-import Button from './Button';
-import { Link } from 'react-router-dom';
-import SmartContractService from '../../contracts/smartContract';
+import React, { useState } from 'react'
+import Button from './Button'
+import { Link } from 'react-router-dom'
+import SmartContractService from '../../contracts/smartContract'
 
 const Navbar = () => {
-  const [isConnected, setIsConnected] = useState(false);
-  const [account, setAccount] = useState(null);
-  const [ownerID, setOwnerID] = useState(null);
+  const [isConnected, setIsConnected] = useState(false)
+  const [account, setAccount] = useState(null)
+  const [ownerID, setOwnerID] = useState(null)
 
   const ConnectWallet = async () => {
-    console.log("ConnectWallet in Navbar called");
+    console.log('ConnectWallet in Navbar called')
     try {
-      await SmartContractService.connectWallet();
-      const signer = await SmartContractService.signer;
-      const address = await signer.getAddress();
-      setAccount(address);
-      setIsConnected(true);
-      console.log('Wallet connected successfully');
+      await SmartContractService.connectWallet()
+      const signer = await SmartContractService.signer
+      const address = await signer.getAddress()
+      setAccount(address)
+      setIsConnected(true)
+      console.log('Wallet connected successfully')
 
       // Fetch the owner ID
-      const fetchedOwnerID = await SmartContractService.getOwnerID(address);
-      setOwnerID(fetchedOwnerID); // Directly set the ownerID
+      const fetchedOwnerID = await SmartContractService.getOwnerID(address)
+      setOwnerID(fetchedOwnerID) // Directly set the ownerID
     } catch (error) {
-      console.error('Error connecting wallet:', error);
+      console.error('Error connecting wallet:', error)
     }
-  };
+  }
 
   const handleSignUp = async () => {
-    console.log("SignUp button clicked");
+    console.log('SignUp button clicked')
     try {
       if (!isConnected) {
         // Connect wallet first if not already connected
-        await ConnectWallet();
+        await ConnectWallet()
       }
-      const result = await SmartContractService.signUP();
-      console.log('SignUp result:', result);
-      setOwnerID(result.toNumber ? result.toNumber() : parseInt(result, 10)); // Convert if necessary
+      const result = await SmartContractService.signUP()
+      console.log('SignUp result:', result)
+      setOwnerID(result.toNumber ? result.toNumber() : parseInt(result, 10)) // Convert if necessary
     } catch (error) {
-      console.error('Error signing up:', error);
+      console.error('Error signing up:', error)
     }
-  };
+  }
 
   return (
     <div>
@@ -126,7 +114,10 @@ const Navbar = () => {
         <div>
           <ul className='flex gap-5 align-middle pt-1 pr-1'>
             <li>
-              <Button text={isConnected ? 'Connected' : 'Connect Wallet'} onClick={ConnectWallet} />
+              <Button
+                text={isConnected ? 'Connected' : 'Connect Wallet'}
+                onClick={ConnectWallet}
+              />
             </li>
             <li>
               <Button
@@ -138,30 +129,10 @@ const Navbar = () => {
         </div>
       </nav>
     </div>
-  );
-};
+  )
+}
 
-export default Navbar;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default Navbar
 
 // // import React from 'react'
 // import Button from './Button'

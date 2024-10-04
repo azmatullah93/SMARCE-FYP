@@ -14,7 +14,7 @@ const ManufacturerDashboard = () => {
     productId: '',
     productName: '',
     quantity: '',
-    url: '',
+    imageUrl: '',
     qrCode: '',
     image: null
   })
@@ -48,16 +48,35 @@ const ManufacturerDashboard = () => {
     }
   }
 
-  const handleAdd = async () => {
+  const handleAdd = async e => {
+    e.preventDefault()
     console.log('handleAdd function is called')
 
     try {
-      const result = await SmartContractService.manufactureProduct()
+      const qrCodeDataUrl = await QRCode.toDataURL('productId')
+      console.log(qrCodeDataUrl) // This will be the generated QR code in base64 format
+      const result = await SmartContractService.manufactureProduct(
+        productId,
+        productName,
+        qrCode,
+        quantity,
+        imageUrl
+      )
+
+      // if (!result || result === undefined) {
+      //   console.error(error)
+      //   toast(error.message)
+      //   return
+      // }
       toast.success('Product Added successfully')
+      console.log('=================================================')
+
       console.log(result)
+
+      console.log('=================================================')
     } catch (error) {
-      console.error(error.message)
-      toast.error('Error')
+      console.error('The Error is: ', error)
+      toast.error(error.message)
     }
     toggleForm()
   }
@@ -118,7 +137,7 @@ const ManufacturerDashboard = () => {
 
                 <div className='mb-5'>
                   <label
-                    htmlFor='source'
+                    htmlFor='quantity'
                     className='block text-sm font-medium mx-4 text-gray-700'
                   >
                     Quantity
@@ -136,7 +155,7 @@ const ManufacturerDashboard = () => {
                 </div>
                 <div className='mb-5'>
                   <label
-                    htmlFor='url'
+                    htmlFor='imageUrl'
                     className='block text-sm font-medium mx-4 text-gray-700'
                   >
                     URL
@@ -144,12 +163,12 @@ const ManufacturerDashboard = () => {
                   <input
                     className='block w-full py-4 px-4 mt-1 border border-gray-300 rounded-lg shadow-sm placeholer-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
                     type='text'
-                    id='url'
-                    name='url'
+                    id='imageUrl'
+                    name='imageUrl'
                     required
                     placeholder='Enter The URL of the Product'
                     onChange={handleChange}
-                    value={product.url}
+                    value={product.imageUrl}
                   />
                 </div>
                 <div className='mb-5'>
@@ -201,10 +220,12 @@ const ManufacturerDashboard = () => {
                   alt={product.name}
                 />
                 <div className='p-4'>
-                  <h3 className='text-lg font-semibold'>{`ID: ${product.ID}`}</h3>
-                  <h3 className='text-lg font-semibold'>{product.name}</h3>
+                  <h3 className='text-lg font-semibold'>{`ID: ${product.productId}`}</h3>
+                  <h3 className='text-lg font-semibold'>
+                    {product.productName}
+                  </h3>
                   <p className='text-gray-600'>{`Quantity: ${product.quantity}`}</p>
-                  <p className='text-gray-600'>{`URL: ${product.url}`}</p>
+                  <p className='text-gray-600'>{`URL: ${product.imageUrl}`}</p>
                 </div>
               </div>
             )

@@ -58,21 +58,13 @@
 
 // export default new SmartContractService();
 
-
-
-
-
-
-
-
 // import { ethers } from 'ethers';
-// import contractABI from './SupplyChain.json'; 
+// import contractABI from './SupplyChain.json';
 
 // const abi = contractABI.abi;
 // const contractAddress = '0x5B71964D6b2e1f7f9CDAC032c44d6AFDB705fc0c';
 
-
-// const nodeUrl = 'https://rpc.testnet.fantom.network'; 
+// const nodeUrl = 'https://rpc.testnet.fantom.network';
 
 // class SmartContractService {
 //   constructor() {
@@ -131,7 +123,7 @@
 //     const ownerID = await this.nodeContract.qrCodes(qrCode);
 //     return ownerID;
 //   }
-  
+
 //   async getProductImage(productId){
 //     const image = await this.nodeContract.productImage(productId);
 //   }
@@ -139,20 +131,22 @@
 
 // export default new SmartContractService();
 
-
-
-import { ethers } from 'ethers';
-import contractABI from './SupplyChain.json'; // Update this path
+import { ethers } from "ethers";
+import contractABI from "./SupplyChain.json"; // Update this path
 
 const abi = contractABI.abi;
-const contractAddress = '0x5B71964D6b2e1f7f9CDAC032c44d6AFDB705fc0c';
+const contractAddress = "0x5B71964D6b2e1f7f9CDAC032c44d6AFDB705fc0c";
 
-const nodeUrl = 'https://rpc.testnet.fantom.network'; 
+const nodeUrl = "https://rpc.testnet.fantom.network";
 
 class SmartContractService {
   constructor() {
     this.nodeProvider = new ethers.JsonRpcProvider(nodeUrl);
-    this.nodeContract = new ethers.Contract(contractAddress, abi, this.nodeProvider);
+    this.nodeContract = new ethers.Contract(
+      contractAddress,
+      abi,
+      this.nodeProvider
+    );
   }
 
   async metamask() {
@@ -178,14 +172,25 @@ class SmartContractService {
 
   async manufactureProduct(productId, qrCode, imageUrl, quantity) {
     await this.metamask();
-    const tx = await this.contract.manufactureProduct(productId, qrCode, imageUrl, quantity);
+    const tx = await this.contract.manufactureProduct(
+      productId,
+      productName,
+      qrCode,
+      imageUrl,
+      quantity
+    );
     await tx.wait();
     return tx;
   }
 
   async transferProduct(productId, toOwnerID, quantity, location) {
     await this.metamask();
-    const tx = await this.contract.transferProduct(productId, toOwnerID, quantity, location);
+    const tx = await this.contract.transferProduct(
+      productId,
+      toOwnerID,
+      quantity,
+      location
+    );
     await tx.wait();
     return tx;
   }
@@ -206,8 +211,8 @@ class SmartContractService {
     const ownerID = await this.nodeContract.qrCodes(qrCode);
     return ownerID;
   }
-  
-  async getProductImage(productId){
+
+  async getProductImage(productId) {
     const image = await this.nodeContract.productImage(productId);
     return image;
   }
